@@ -28,9 +28,32 @@ class CategoryListView(generics.ListAPIView):
 
 
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(is_active=True)
+        search = self.request.query_params.get("search")
+        category = self.request.query_params.get("category")
+        min_price = self.request.query_params.get("min_price")
+        max_price = self.request.query_params.get("max_price")
+        featured = self.request.query_params.get("featured")
+        in_stock = self.request.query_params.get("in_stock")
+
+        if search:
+            queryset = queryset.filter(title__icontains=search) | queryset.filter(description__icontains=search)
+        if category:
+            queryset = queryset.filter(category__slug=category)
+        if min_price:
+            queryset = queryset.filter(price__gte=min_price)
+        if max_price:
+            queryset = queryset.filter(price__lte=max_price)
+        if featured and featured.lower() in ["1", "true", "yes"]:
+            queryset = queryset.filter(is_featured=True)
+        if in_stock and in_stock.lower() in ["1", "true", "yes"]:
+            queryset = queryset.filter(inventory__gt=0)
+
+        return queryset.order_by("-is_featured", "-created_at")
 
 
 class ProductDetailView(generics.RetrieveAPIView):

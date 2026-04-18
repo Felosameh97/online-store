@@ -1,5 +1,14 @@
 {
-  "builds": [
-    { "src": "frontend/package.json", "use": "@vercel/next" }
-  ]
+  "version": 3,
+  "experimentalServices": {
+    "frontend": {
+      "entrypoint": "frontend",
+      "routePrefix": "/",
+      "framework": "nextjs"
+    },
+    "backend": {
+      "entrypoint": "backend",
+      "routePrefix": "/_/backend"
+    }
+  }
 }

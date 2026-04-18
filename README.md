@@ -62,11 +62,20 @@ Path: `frontend`
 
 ### Vercel
 
+This repo uses Vercel multi-service deployment for frontend and backend.
+
 1. Sign in to Vercel and choose "Import Project".
-2. Connect the GitHub repository.
-3. Set the Root Directory to `frontend`.
-4. Use `npm install`, `npm run build`, and `npm start` for the build settings.
-5. Define any environment variables needed for the frontend.
+2. Connect the GitHub repository `Felosameh97/online-store`.
+3. Set the Root Directory to `./` (important — do not choose `frontend`).
+4. Vercel will read `vercel.json` from the repo root and deploy two services:
+   - `frontend` from `frontend/` using Next.js
+   - `backend` from `backend/` using Django
+5. Add environment variables in Vercel for backend and frontend as needed.
+6. Deploy and monitor logs in Vercel.
+
+If Vercel asks for a framework or build settings, use the defaults from the `vercel.json` configuration.
+
+> If you already created a project with `frontend` as root, delete it and recreate it using root `./` so Vercel loads the multi-service config correctly.
 
 ## Notes
 
